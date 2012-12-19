@@ -1,8 +1,9 @@
 #The world grid class, stores building locations
 
 import math
+import buildings
 
-class grid:
+class Grid:
   """The grid class, for storing and retrieving buildings within the world"""
 
   def __init__(self, size):
@@ -10,6 +11,8 @@ class grid:
     self._locations = [[None for x in xrange(size.y)] for x in xrange(size.x)]
     #Store the size of the grid
     self._size = size
+    #Create the sprite group for the buildings
+    self._buildingGroup = Buildings()
 
   def toGrid(pos):
     _gridPos = dict()
@@ -44,3 +47,6 @@ class grid:
       return self._locations[pos.x][pos.y]
     else:
       print("No building to get")
+
+  def draw(self, surface):
+    self._buildingGroup.draw(surface)

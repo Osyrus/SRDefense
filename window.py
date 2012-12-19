@@ -3,6 +3,8 @@ import sys
 from pygame.locals import *
 
 import tower
+import renderer
+import grid
 
 blueColour = pygame.Color(0, 0, 255)
 redColour = pygame.Color(255, 0, 0)
@@ -15,6 +17,8 @@ class Window:
     self.size = self.width, self.height = width, height
     self._display = None
     self._running = False
+    self._renderer = Renderer()
+    self._grid = Grid({x: 20, y: 20})
 
   def init(self):
     pygame.init()
@@ -32,7 +36,7 @@ class Window:
 
     if event.type == MOUSEBUTTONUP:
       if event.button == 1:
-        pass
+        addTower(self._grid, event.pos)
 
       if event.button == 3:
         pass
@@ -41,12 +45,8 @@ class Window:
       if event.button == 1:
         pass
 
-  def loopLogic(self):
+  def loopLogic(self, dt):
     pass
-
-  def loopRender(self):
-    self._display.fill(whiteColour)
-
 
   def loopEnd(self):
     pygame.quit()
@@ -56,18 +56,31 @@ class Window:
     if self._running == False:
       self.init()
 
+    _dt = 0
+
     while(self._running):
       for event in pygame.event.get():
         self.loopEvent(event)
 
-      self.loopLogic()
+      self.loopLogic(_dt)
 
-      self.loopRender()
+      self._renderer.render(_dt, self._grid)
 
-      pygame.display.update()
-      self._clock.tick(30)
+      _dt = self._clock.tick(30)
 
     self.loopEnd()
+
+def addTower(grid, pos):
+  #Find the grid coordinate
+  gridPos = grid.toGrid(pos)
+
+  if not grid.occupied(gridPos):
+    #Create a tower
+    tower = Tower(gridPos)
+    #Add the tower to the grid
+    grid.add(gridPos, tower)
+  else:
+    print("Cannot add tower, grid position occupied")
 
 if __name__ == "__main__":
   window = Window()
