@@ -2,29 +2,23 @@ import pygame
 import sys
 from pygame.locals import *
 
-import tower
-import renderer
-import grid
-
-blueColour = pygame.Color(0, 0, 255)
-redColour = pygame.Color(255, 0, 0)
-greenColour = pygame.Color(0, 255, 0)
-whiteColour = pygame.Color(255, 255, 255)
-blackColour = pygame.Color(0, 0, 0)
+from tower import *
+from renderer import *
+from grid import *
 
 class Window:
   def __init__(self, width = 640, height = 400):
     self.size = self.width, self.height = width, height
     self._display = None
     self._running = False
-    self._renderer = Renderer()
-    self._grid = Grid({x: 20, y: 20})
 
   def init(self):
     pygame.init()
     self._display = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
     self._running = True
     self._clock = pygame.time.Clock()
+    self._renderer = Renderer(self._display)
+    self._grid = Grid({'x': 20, 'y': 20}, self._renderer)
 
   def loopEvent(self, event):
     if event.type == pygame.QUIT:
@@ -46,7 +40,7 @@ class Window:
         pass
 
   def loopLogic(self, dt):
-    pass
+    self._grid.update(dt)
 
   def loopEnd(self):
     pygame.quit()
@@ -58,13 +52,15 @@ class Window:
 
     _dt = 0
 
+    addTower(self._grid, (1.5, 2.5))
+
     while(self._running):
       for event in pygame.event.get():
         self.loopEvent(event)
 
       self.loopLogic(_dt)
 
-      self._renderer.render(_dt, self._grid)
+      self._renderer.render(self._grid)
 
       _dt = self._clock.tick(30)
 
@@ -72,7 +68,9 @@ class Window:
 
 def addTower(grid, pos):
   #Find the grid coordinate
+  print("Mouse location: " + str(pos))
   gridPos = grid.toGrid(pos)
+  print("Grid location: " + str(gridPos))
 
   if not grid.occupied(gridPos):
     #Create a tower

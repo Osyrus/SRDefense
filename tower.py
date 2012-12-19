@@ -16,4 +16,4 @@ class Tower(pygame.sprite.DirtySprite):
     self.rect = self.image.get_rect()
 
   def update(self, dt):
-    pass
+    self.dirty = 1
