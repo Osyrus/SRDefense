@@ -8,5 +8,3 @@ class Buildings(pygame.sprite.LayeredDirty):
   def __init__(self, renderer):
     super(Buildings, self).__init__()
     self.set_clip()
-    
-  

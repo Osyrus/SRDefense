@@ -14,6 +14,7 @@ class Renderer:
   def __init__(self, display):
     self._display = display
     self._background = whiteColour
+    self._display.fill(self._background)
 
   def setBackground(self, bg):
     self._background = bg
@@ -25,7 +26,6 @@ class Renderer:
     return self._display
 
   def render(self, *toDraw):
-    self._display.fill(self._background)
 
     for element in toDraw:
       element.draw(self._display)
