@@ -3,7 +3,7 @@
 import math
 
 class grid:
-  """docstring for grid"""
+  """The grid class, for storing and retrieving buildings within the world"""
 
   def __init__(self, size):
     #Create the two dimension matrix to store references to buildings in
@@ -31,3 +31,16 @@ class grid:
       self._locations[pos.x][pos.y] = building
     else:
       print("Cannot place building, grid position occupied")
+
+  def remove(self, pos):
+    if self.occupied(pos):
+      #Building deleter here?
+      self._locations[pos.x][pos.y] = None
+    else:
+      print("No building to delete!")
+
+  def get(self, pos):
+    if self.occupied(pos):
+      return self._locations[pos.x][pos.y]
+    else:
+      print("No building to get")
